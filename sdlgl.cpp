@@ -1,0 +1,172 @@
+#include "sdlgl.h"
+
+#include <iostream>
+
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
+SDLGLMain::SDLGLMain()
+{
+
+	m_width = 320;
+	m_height = 240;
+	
+	// set up video
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
+
+	SDL_SetVideoMode(m_width,m_height,32,SDL_OPENGL);
+	glewInit();
+	init();
+
+	m_quit = false;
+}
+
+SDLGLMain::~SDLGLMain()
+{
+}
+
+void SDLGLMain::init()
+{
+	// set opengl attributes
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_TEXTURE_2D);
+	glShadeModel(GL_FLAT);
+
+	// set up projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20);
+	glMatrixMode(GL_MODELVIEW);
+	
+	glGenTextures(1, &m_fbTex);
+	glBindTexture(GL_TEXTURE_2D, m_fbTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+	glGenFramebuffersEXT(1, &m_fbo);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
+	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_fbTex, 0);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
+	glGenBuffersARB(1, &m_pbo);
+	glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, m_pbo);
+	glBufferData(GL_PIXEL_PACK_BUFFER_ARB, m_width*m_height*4, NULL, GL_STREAM_READ);
+	glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, 0);
+
+}
+
+void SDLGLMain::draw()
+{
+	// render to texture
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, -2.0);
+	glBegin(GL_QUADS);
+		glColor4f(0.0, 0.0, 1.0, 1.0);
+		glVertex3d(0.0, 0.0, 0.0);
+		glVertex3d(0.0, -1.0, 0.0);
+		glVertex3d(-1.0, -1.0, 0.0);
+		glVertex3d(-1.0, 0.0, 0.0);
+		
+		glColor4f(1.0, 0.0, 0.0, 1.0);
+		glVertex3d(0.0, 0.0, 0.0);
+		glVertex3d(0.0, 1.0, 0.0);
+		glVertex3d(1.0, 1.0, 0.0);
+		glVertex3d(1.0, 0.0, 0.0);
+	glEnd();
+
+	glPopMatrix();
+	glFlush();
+	
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
+	// render to screen
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, -5.0);
+	
+	glBindTexture(GL_TEXTURE_2D, m_fbTex);
+	
+	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+	glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo);
+	//glReadPixels(0, 0, m_width, m_height, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+	GLubyte* texBuf = (GLubyte*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
+	if (texBuf != 0)
+	{
+		glBegin(GL_POINTS);
+		for ( int y = 0; y < m_height; y+=2)
+		{
+			for (int x = 0; x < m_width; x+=2)
+			{
+				GLfloat xmul = 4.0*x/(float)m_width - 2.0;
+				GLfloat ymul = 4.0*y/(float)m_height - 2.0;
+				glColor4ubv(&texBuf[ (y*m_width + x)*4 + 0]);
+				glVertex3f(xmul, ymul, 0.0);
+			}
+		}
+		glEnd();
+
+		glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB);
+	}
+	glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);//*/
+
+	/*
+	glBegin(GL_QUADS);
+		glColor4f(0.4, 0.4, 0.4, 1.0);
+		glTexCoord2f(0, 0);	glVertex3d(-1.0, -1.0, 1.0);
+		glTexCoord2f(0, 1);	glVertex3d(-1.0, 1.0, 1.0);
+		glTexCoord2f(1, 1);	glVertex3d(1.0, 1.0, 0.0);
+		glTexCoord2f(1, 0);	glVertex3d(1.0, -1.0, 0.0);
+	glEnd();//*/
+
+	glPopMatrix();
+	glFlush();
+	SDL_GL_SwapBuffers();
+}
+
+void SDLGLMain::handleEvents(const SDL_Event &event)
+{
+	switch (event.type)
+	{
+		case SDL_QUIT:
+			quit();
+			break;
+		default:
+			break;
+	}
+}
+
+void SDLGLMain::quit()
+{
+	m_quit = true;
+}
+
+int SDLGLMain::run()
+{
+
+	while (!m_quit)
+	{
+		SDL_Event event;
+		while (SDL_PollEvent( &event) )
+		{
+			handleEvents(event);
+		}
+		draw();
+		SDL_Delay(10);
+	}
+
+	
+	return 0;
+}
