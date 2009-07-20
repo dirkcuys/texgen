@@ -12,7 +12,9 @@ namespace Tai
 		~SimpleGene();
 
 		int getLength();
-		void mutate();
+		void mutate(double probability, double factor);
+
+		static SimpleGene crossOver(const SimpleGene&, const SimpleGene&);
 
 	private:
 		std::vector<double> values;
