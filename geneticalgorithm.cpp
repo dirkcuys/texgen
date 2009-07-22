@@ -1,4 +1,7 @@
 #include <vector>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 
 using namespace Tai;
 using namespace std;
@@ -27,10 +30,11 @@ void GeneticAlgorithm<Gene,FitnessFunction>::iterate()
 
 	for (int cnt = 0; cnt < populationSize; ++cnt)
 	{
-		int mate = int(populationSize*rand()/(1.0 * RAND_MAX));
+		int mate = int(rand()/(RAND_MAX + 1.0)*populationSize);
 		while (mate == cnt && populationSize > 2)
 		{
-			mate = int(populationSize*rand()/(1.0 * RAND_MAX));
+			mate = int(rand()/(RAND_MAX + 1.0)*populationSize);
+	
 		}
 
 		Gene offspring = Gene::crossOver(population[cnt], population[mate]);

@@ -50,3 +50,17 @@ SimpleGene SimpleGene::crossOver(const SimpleGene& lhs, const SimpleGene& rhs)
 	// TODO do the crossover
 	return SimpleGene();
 }
+
+SimpleGene Tai::randomGene(int size)
+{
+	vector<double> tmp;
+	tmp.reserve(10*size);
+	vector<double>::iterator it = tmp.begin();
+	for (; it != tmp.end(); ++it)
+	{
+		*it = 2*(rand()/(1.0 + RAND_MAX)) - 1.0;
+	}
+	SimpleGene sg;
+	sg.values(tmp);
+	return sg;
+}

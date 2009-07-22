@@ -7,5 +7,5 @@ include_directories( ${include_paths} )
 set(src_files main.cpp sdlgl.cpp simplegene.cpp simplefitness.cpp)
 add_executable(texgen ${src_files})
 
-set (link_libs GL GLEW SDL)
+set (link_libs GL GLEW SDL m)
 target_link_libraries(texgen ${link_libs})

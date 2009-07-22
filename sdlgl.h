@@ -6,6 +6,11 @@
 #include "gl.h"
 #include "glu.h"
 
+namespace Tai
+{
+	class SimpleGene;
+};
+
 class SDLGLMain
 {
 public:
@@ -14,6 +19,7 @@ public:
 
 	void init();
 	void draw();
+	void renderGeneToSurface(const Tai::SimpleGene&);
 	void handleEvents(const SDL_Event &);
 
 	void quit();
