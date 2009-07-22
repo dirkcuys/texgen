@@ -48,17 +48,16 @@ void SimpleGene::mutate(double probability, double factor)
 SimpleGene SimpleGene::crossOver(const SimpleGene& lhs, const SimpleGene& rhs)
 {
 	// TODO do the crossover
-	return SimpleGene();
+	return SimpleGene(lhs);
 }
 
 SimpleGene Tai::randomGene(int size)
 {
 	vector<double> tmp;
 	tmp.reserve(10*size);
-	vector<double>::iterator it = tmp.begin();
-	for (; it != tmp.end(); ++it)
+	for (int cnt = 0; cnt < 10*size; ++cnt)
 	{
-		*it = 2*(rand()/(1.0 + RAND_MAX)) - 1.0;
+		tmp.push_back(2.0*(rand()/(1.0 + RAND_MAX)) - 1.0);
 	}
 	SimpleGene sg;
 	sg.values(tmp);

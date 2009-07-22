@@ -34,7 +34,6 @@ void GeneticAlgorithm<Gene,FitnessFunction>::iterate()
 		while (mate == cnt && populationSize > 2)
 		{
 			mate = int(rand()/(RAND_MAX + 1.0)*populationSize);
-	
 		}
 
 		Gene offspring = Gene::crossOver(population[cnt], population[mate]);

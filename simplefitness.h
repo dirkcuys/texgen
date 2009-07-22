@@ -1,6 +1,8 @@
 #ifndef TAI_SIMPLEFITNESS
 #define TAI_SIMPLEFITNESS
 
+#include "sdlgl.h"
+
 namespace Tai
 {
 	// forward declaration
@@ -9,7 +11,10 @@ namespace Tai
 	class SimpleFitness
 	{
 	public:
+		SimpleFitness(SDLGLMain* sdl) : m_sdl(sdl) {};
 		double calculate(const SimpleGene&);
+	private:
+		SDLGLMain* m_sdl;
 	};
 }; //namespace Tai
 

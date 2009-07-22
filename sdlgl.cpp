@@ -152,7 +152,7 @@ void SDLGLMain::draw()
 void SDLGLMain::renderGeneToSurface(const Tai::SimpleGene &gene)
 {
 	// render to texture
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
+	//glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	
@@ -166,25 +166,26 @@ void SDLGLMain::renderGeneToSurface(const Tai::SimpleGene &gene)
 	glBegin(GL_TRIANGLES);
 		while (gene.values().size() - cnt > 10)
 		{
-			glColor4dv(&gene.values()[cnt]);
-			glVertex2dv(&gene.values()[cnt+4]);
-			glVertex2dv(&gene.values()[cnt+6]);
-			glVertex2dv(&gene.values()[cnt+8]);
+			glColor3d(gene.values()[cnt], gene.values()[cnt + 1], gene.values()[cnt + 2]);
+			glVertex2d(gene.values()[cnt+4], gene.values()[cnt+5]);
+			glVertex2d(gene.values()[cnt+6], gene.values()[cnt+7]);
+			glVertex2d(gene.values()[cnt+8], gene.values()[cnt+9]);
 			cnt += 10;
 		}
 	glEnd();
-
+	
 	glPopMatrix();
-	glMatrixMode(GL_PROJECTION);
+	/*glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);*/
 
 	glFlush();
+	SDL_GL_SwapBuffers();
 	
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-
+/*	
 	glBindTexture(GL_TEXTURE_2D, m_fbTex);
-	
+
 	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_BGRA, GL_UNSIGNED_BYTE, 0);
 	glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo);
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));

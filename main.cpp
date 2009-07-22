@@ -5,25 +5,28 @@
 
 #include <iostream>
 
+using namespace std;
+
 int main(int argc, char **argv)
 {
 
-	std::cout << "Starting texgen app" << std::endl;
+	cout << "Starting texgen app" << endl;
 
 	SDLGLMain app;
-	Tai::SimpleFitness ff;
+	Tai::SimpleFitness ff(&app);
 	Tai::GeneticAlgorithm<Tai::SimpleGene, Tai::SimpleFitness> ga(ff);
 
-	std::vector<Tai::SimpleGene> pop;
-	for (int i = 0; i < 20; ++i)
+	vector<Tai::SimpleGene> pop;
+	for (int i = 0; i < 5; ++i)
 	{
-		pop.push_back(Tai::randomGene(int(4*rand()/(1.0 + RAND_MAX))));
+		pop.push_back(Tai::randomGene(9));
 	}
 
 	ga.setInitialPopulation(pop);
 
 	for (int c = 0; c < 100; ++c)
 	{
+		cout << "iteration " << c << endl;
 		ga.iterate();
 	}
 
