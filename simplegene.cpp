@@ -6,22 +6,34 @@ using namespace std;
 
 SimpleGene::SimpleGene()
 {
+	m_fitness = 0;
 }
 
 SimpleGene::~SimpleGene()
 {
 }
 
-int SimpleGene::getLength()
+int SimpleGene::length() const
 {
-	return values.size();
+	return m_values.size();
+}
+
+double SimpleGene::fitness() const
+{
+	return m_fitness;
+}
+
+double SimpleGene::fitness(double fitness_)
+{
+	m_fitness = fitness_;
+	return m_fitness;
 }
 	
 void SimpleGene::mutate(double probability, double factor)
 {
-	vector<double>::iterator value_it = values.begin();
+	vector<double>::iterator value_it = m_values.begin();
 
-	for (; value_it != values.end(); ++value_it)
+	for (; value_it != m_values.end(); ++value_it)
 	{
 		double randomValue = rand()/(RAND_MAX + 1.0);
 		if (randomValue < probability)
@@ -29,6 +41,7 @@ void SimpleGene::mutate(double probability, double factor)
 			*value_it += factor*rand()/(RAND_MAX + 1.0);
 		}
 	}
+	m_fitness = 0;
 }
 
 //static function
