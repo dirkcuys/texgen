@@ -12,7 +12,7 @@ namespace Tai
 	{
 	public:
 		SimpleFitness(SDLGLMain* sdl) : m_sdl(sdl) {};
-		double calculate(const SimpleGene&);
+		double calculate(SimpleGene&);
 	private:
 		SDLGLMain* m_sdl;
 	};

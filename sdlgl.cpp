@@ -6,14 +6,16 @@
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-SDLGLMain::SDLGLMain()
+SDLGLMain::SDLGLMain(int width, int height)
 {
 
-	m_width = 320;
-	m_height = 240;
+	m_width = width;
+	m_height = height;
 	
 	// set up video
 	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Surface* sdlImg = SDL_LoadBMP("image.bmp");
+	m_originalImage = loadImage(sdlImg);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
 
 	SDL_SetVideoMode(m_width,m_height,32,SDL_OPENGL);
@@ -31,15 +33,18 @@ void SDLGLMain::init()
 {
 	// set opengl attributes
 	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 
 	glEnable(GL_TEXTURE_2D);
-	glShadeModel(GL_FLAT);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glShadeModel(GL_FLAT);
 
 	// set up projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20);
+	//glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20);
+	glOrtho(-1, 1, -1, 1, 0, 1);
 	glMatrixMode(GL_MODELVIEW);
 	
 	glGenTextures(1, &m_fbTex);
@@ -149,24 +154,17 @@ void SDLGLMain::draw()
 	SDL_GL_SwapBuffers();
 }
 
-void SDLGLMain::renderGeneToSurface(const Tai::SimpleGene &gene)
+void SDLGLMain::renderGene(const Tai::SimpleGene &gene)
 {
-	// render to texture
-	//glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(-1, 1, -1, 1, 0, 1);
 
-	glPushMatrix();
+	glEnable(GL_BLEND);
+	glClear(GL_COLOR_BUFFER_BIT);
+	
 	int cnt = 0;
 	glBegin(GL_TRIANGLES);
 		while (gene.values().size() - cnt > 10)
 		{
-			glColor3d(gene.values()[cnt], gene.values()[cnt + 1], gene.values()[cnt + 2]);
+			glColor4d(gene.values()[cnt], gene.values()[cnt + 1], gene.values()[cnt + 2], clamp(gene.values()[cnt + 3],0.0, 1.0));
 			glVertex2d(gene.values()[cnt+4], gene.values()[cnt+5]);
 			glVertex2d(gene.values()[cnt+6], gene.values()[cnt+7]);
 			glVertex2d(gene.values()[cnt+8], gene.values()[cnt+9]);
@@ -174,29 +172,36 @@ void SDLGLMain::renderGeneToSurface(const Tai::SimpleGene &gene)
 		}
 	glEnd();
 	
-	glPopMatrix();
-	/*glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);*/
+}
 
-	glFlush();
+GLubyte* SDLGLMain::renderGeneToSurface(const Tai::SimpleGene &gene)
+{
+	// render to texture
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
+	
+	renderGene(gene);
+
+	//glFlush();
 	SDL_GL_SwapBuffers();
 	
+	
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-/*	
 	glBindTexture(GL_TEXTURE_2D, m_fbTex);
 
 	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_BGRA, GL_UNSIGNED_BYTE, 0);
 	glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo);
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
 	GLubyte* texBuf = (GLubyte*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
+	GLubyte *image = new GLubyte[m_width*m_height*4];
 	if (texBuf != 0)
 	{
 		// do something with the texture
+		//return texBuf;
+		memcpy(image, texBuf, m_width*m_height*4);
 		glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB);
 	}
 	glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);//*/
-
+	return image;
 }
 
 void SDLGLMain::handleEvents(const SDL_Event &event)
@@ -214,6 +219,16 @@ void SDLGLMain::handleEvents(const SDL_Event &event)
 void SDLGLMain::quit()
 {
 	m_quit = true;
+}
+
+void SDLGLMain::processEvents()
+{
+
+	SDL_Event event;
+	while (SDL_PollEvent( &event) )
+	{
+		handleEvents(event);
+	}
 }
 
 int SDLGLMain::run()

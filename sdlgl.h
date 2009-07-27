@@ -5,26 +5,42 @@
 #include "glew.h"
 #include "gl.h"
 #include "glu.h"
+#include "image.h"
 
 namespace Tai
 {
 	class SimpleGene;
 };
 
+template <typename T>
+T clamp(const T& val, const T& min, const T& max)
+{
+	if (val < min)
+		return min;
+	if (val > max)
+		return max;
+}
+
 class SDLGLMain
 {
 public:
-	SDLGLMain();
+	SDLGLMain(int width, int height);
 	~SDLGLMain();
 
 	void init();
 	void draw();
-	void renderGeneToSurface(const Tai::SimpleGene&);
 	void handleEvents(const SDL_Event &);
-
 	void quit();
-
+	void processEvents();
 	int run();
+
+	void renderGene(const Tai::SimpleGene&);
+	GLubyte* renderGeneToSurface(const Tai::SimpleGene&);
+
+	Image* getImage(){ return m_originalImage; };
+
+	GLuint width() const { return m_width; };
+	GLuint height() const { return m_height; };
 
 protected:
 	SDLGLMain(const SDLGLMain&);
@@ -37,6 +53,7 @@ private:
 	GLuint m_pbo;
 	GLuint m_width;
 	GLuint m_height;
+	Image *m_originalImage;
 
 };
 

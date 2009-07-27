@@ -10,13 +10,15 @@ namespace Tai
 	class GeneticAlgorithm
 	{
 	public:
+		typedef Gene GeneType;
+
 		GeneticAlgorithm(const FitnessFunction &);
 		~GeneticAlgorithm();
 	
 		void iterate();
 
 		void setInitialPopulation(const std::vector<Gene> &);
-		typedef Gene GeneType;
+		const GeneType& bestGene(){ return population[0];};
 
 	private:
 		std::vector<Gene> population;
@@ -26,7 +28,7 @@ namespace Tai
 		{
 			bool operator()(const Gene& g1, const Gene& g2)
 			{
-				return g1.fitness() > g2.fitness();
+				return g1.fitness() < g2.fitness();
 			}
 		};
 

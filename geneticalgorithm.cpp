@@ -37,7 +37,7 @@ void GeneticAlgorithm<Gene,FitnessFunction>::iterate()
 		}
 
 		Gene offspring = Gene::crossOver(population[cnt], population[mate]);
-		offspring.mutate(0.5, 0.1);
+		offspring.mutate(0.8, 0.3);
 		population.push_back(offspring);
 	}
 

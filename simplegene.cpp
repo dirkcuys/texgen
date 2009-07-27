@@ -48,7 +48,23 @@ void SimpleGene::mutate(double probability, double factor)
 SimpleGene SimpleGene::crossOver(const SimpleGene& lhs, const SimpleGene& rhs)
 {
 	// TODO do the crossover
-	return SimpleGene(lhs);
+	
+	int c1 = int((rand()/(1.0 + RAND_MAX))*lhs.length());
+	int c2 = int((rand()/(1.0 + RAND_MAX))*rhs.length());
+	c2 = c2 - (c2 % 10) + (c1 % 10);
+
+	SimpleGene sg;
+	sg.m_values.reserve(c1 + rhs.length() - c2);
+	for (int i = 0; i < c1; ++i)
+	{
+		sg.m_values.push_back(lhs.m_values[i]);
+	}
+	for (int i = c2; i < rhs.length(); ++i)
+	{
+		sg.m_values.push_back(rhs.m_values[i]);
+	}
+
+	return sg;
 }
 
 SimpleGene Tai::randomGene(int size)
@@ -57,7 +73,11 @@ SimpleGene Tai::randomGene(int size)
 	tmp.reserve(10*size);
 	for (int cnt = 0; cnt < 10*size; ++cnt)
 	{
-		tmp.push_back(2.0*(rand()/(1.0 + RAND_MAX)) - 1.0);
+		tmp.push_back(4.0*(rand()/(1.0 + RAND_MAX)) - 2.0);
+		if ( (cnt - 3) % 10 == 0)
+		{
+			tmp[cnt] = rand()/(1.0 + RAND_MAX);
+		}
 	}
 	SimpleGene sg;
 	sg.values(tmp);
