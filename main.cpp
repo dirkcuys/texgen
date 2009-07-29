@@ -2,6 +2,7 @@
 #include "geneticalgorithm.h"
 #include "simplegene.h"
 #include "simplefitness.h"
+#include "util.h"
 
 #include <iostream>
 
@@ -20,7 +21,7 @@ int main(int argc, char **argv)
 	vector<Tai::SimpleGene> pop;
 	for (int i = 0; i < 5; ++i)
 	{
-		pop.push_back(Tai::randomGene(9));
+		pop.push_back(Tai::randomGene(int(5 + drandom()*20 )) );
 	}
 
 	ga.setInitialPopulation(pop);

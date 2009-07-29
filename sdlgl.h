@@ -6,20 +6,12 @@
 #include "gl.h"
 #include "glu.h"
 #include "image.h"
+#include "util.h"
 
 namespace Tai
 {
 	class SimpleGene;
 };
-
-template <typename T>
-T clamp(const T& val, const T& min, const T& max)
-{
-	if (val < min)
-		return min;
-	if (val > max)
-		return max;
-}
 
 class SDLGLMain
 {

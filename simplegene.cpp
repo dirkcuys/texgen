@@ -1,5 +1,7 @@
 #include "simplegene.h"
 
+#include "util.h"
+
 using namespace Tai;
 using namespace std;
 
@@ -35,10 +37,11 @@ void SimpleGene::mutate(double probability, double factor)
 
 	for (; value_it != m_values.end(); ++value_it)
 	{
-		double randomValue = rand()/(RAND_MAX + 1.0);
+		double randomValue = drandom();
 		if (randomValue < probability)
 		{
-			*value_it += factor*rand()/(RAND_MAX + 1.0);
+			*value_it += factor*(2.0*drandom()-1);
+			//*value_it = drandom();
 		}
 	}
 	m_fitness = 0;
@@ -49,8 +52,8 @@ SimpleGene SimpleGene::crossOver(const SimpleGene& lhs, const SimpleGene& rhs)
 {
 	// TODO do the crossover
 	
-	int c1 = int((rand()/(1.0 + RAND_MAX))*lhs.length());
-	int c2 = int((rand()/(1.0 + RAND_MAX))*rhs.length());
+	int c1 = int(drandom()*lhs.length());
+	int c2 = int(drandom()*rhs.length());
 	c2 = c2 - (c2 % 10) + (c1 % 10);
 
 	SimpleGene sg;
@@ -73,11 +76,7 @@ SimpleGene Tai::randomGene(int size)
 	tmp.reserve(10*size);
 	for (int cnt = 0; cnt < 10*size; ++cnt)
 	{
-		tmp.push_back(4.0*(rand()/(1.0 + RAND_MAX)) - 2.0);
-		if ( (cnt - 3) % 10 == 0)
-		{
-			tmp[cnt] = rand()/(1.0 + RAND_MAX);
-		}
+			tmp.push_back(drandom());
 	}
 	SimpleGene sg;
 	sg.values(tmp);

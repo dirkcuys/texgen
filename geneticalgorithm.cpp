@@ -26,35 +26,41 @@ void GeneticAlgorithm<Gene,FitnessFunction>::iterate()
 	// Selection of next generation
 	
 	int populationSize = population.size();
-	population.reserve(2*populationSize);
+	//population.reserve(2*populationSize);
 
 	for (int cnt = 0; cnt < populationSize; ++cnt)
 	{
-		int mate = int(rand()/(RAND_MAX + 1.0)*populationSize);
+		int mate = int(drandom()*populationSize);
 		while (mate == cnt && populationSize > 2)
 		{
-			mate = int(rand()/(RAND_MAX + 1.0)*populationSize);
+			mate = int(drandom()*populationSize);
 		}
 
 		Gene offspring = Gene::crossOver(population[cnt], population[mate]);
-		offspring.mutate(0.8, 0.3);
-		population.push_back(offspring);
+		//Gene offspring(population[cnt]);// = Gene::crossOver(population[cnt], population[mate]);
+		offspring.mutate(0.5, 0.4);
+		fitnessFunction.calculate(offspring);
+		if (offspring.fitness() < population[cnt].fitness())
+		{
+			population[cnt] = offspring;
+		}
+		//population.push_back(offspring);
 	}
 
 
-	typename vector<Gene>::iterator gene_it = population.begin();
+	/*typename vector<Gene>::iterator gene_it = population.begin();
 	for (; gene_it != population.end(); ++gene_it)
 	{
 		fitnessFunction.calculate(*gene_it);
-	}
+	}*/
 
 	sort(population.begin(), population.end(), MoreFit());
 
 	// kill of weaker part of population
-	while (population.size() > populationSize)
+	/*while (population.size() > populationSize)
 	{
 		population.pop_back();
-	}
+	}*/
 }
 
 template<class Gene, class FitnessFunction>

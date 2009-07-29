@@ -44,7 +44,7 @@ void SDLGLMain::init()
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20);
-	glOrtho(-1, 1, -1, 1, 0, 1);
+	glOrtho(-1.0, 1.0, -1.0, 1.0, 0, 1);
 	glMatrixMode(GL_MODELVIEW);
 	
 	glGenTextures(1, &m_fbTex);
@@ -54,7 +54,7 @@ void SDLGLMain::init()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	glGenFramebuffersEXT(1, &m_fbo);
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
@@ -164,10 +164,10 @@ void SDLGLMain::renderGene(const Tai::SimpleGene &gene)
 	glBegin(GL_TRIANGLES);
 		while (gene.values().size() - cnt > 10)
 		{
-			glColor4d(gene.values()[cnt], gene.values()[cnt + 1], gene.values()[cnt + 2], clamp(gene.values()[cnt + 3],0.0, 1.0));
-			glVertex2d(gene.values()[cnt+4], gene.values()[cnt+5]);
-			glVertex2d(gene.values()[cnt+6], gene.values()[cnt+7]);
-			glVertex2d(gene.values()[cnt+8], gene.values()[cnt+9]);
+			glColor4d(gene.values()[cnt], gene.values()[cnt + 1], gene.values()[cnt + 2], gene.values()[cnt + 3]);
+			glVertex2d(2.0*gene.values()[cnt+4] - 1.0, 2.0*gene.values()[cnt+5] - 1.0);
+			glVertex2d(2.0*gene.values()[cnt+6] - 1.0, 2.0*gene.values()[cnt+7] - 1.0);
+			glVertex2d(2.0*gene.values()[cnt+8] - 1.0, 2.0*gene.values()[cnt+9] - 1.0);
 			cnt += 10;
 		}
 	glEnd();
