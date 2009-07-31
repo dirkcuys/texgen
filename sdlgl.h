@@ -20,6 +20,7 @@ public:
 	~SDLGLMain();
 
 	void init();
+	void drawTargetImage();
 	void draw();
 	void handleEvents(const SDL_Event &);
 	void quit();

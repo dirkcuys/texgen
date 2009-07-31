@@ -14,11 +14,12 @@ SDLGLMain::SDLGLMain(int width, int height)
 	
 	// set up video
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Surface* sdlImg = SDL_LoadBMP("image.bmp");
-	m_originalImage = loadImage(sdlImg);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
 
 	SDL_SetVideoMode(m_width,m_height,32,SDL_OPENGL);
+	SDL_Surface* sdlImg = SDL_LoadBMP("image.bmp");
+	m_originalImage = loadImage(sdlImg);
+
 	glewInit();
 	init();
 
@@ -65,6 +66,31 @@ void SDLGLMain::init()
 	glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, m_pbo);
 	glBufferData(GL_PIXEL_PACK_BUFFER_ARB, m_width*m_height*4, NULL, GL_STREAM_READ);
 	glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, 0);
+
+}
+
+void SDLGLMain::drawTargetImage()
+{		
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+		
+		glBegin(GL_POINTS);
+		for ( int y = 0; y < m_height; y+=2)
+		{
+			for (int x = 0; x < m_width; x+=2)
+			{
+				GLfloat xmul = 2.0*x/(float)m_width - 1.0;
+				GLfloat ymul = 2.0*y/(float)m_height - 1.0;
+				//glColor3ubv(m_originalImage->rawPixels[(y*m_width + x)*3]);
+				glColor3ub(m_originalImage->pixels[y*m_width + x].r, m_originalImage->pixels[y*m_width + x].g, m_originalImage->pixels[y*m_width + x].b);
+				glVertex3f(xmul, ymul, 0.0);
+			}
+		}
+		glEnd();
+
+
+	SDL_GL_SwapBuffers();
 
 }
 

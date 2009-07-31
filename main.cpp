@@ -31,6 +31,7 @@ int main(int argc, char **argv)
 		cout << "iteration " << c << ": ";
 		ga.iterate();
 		app.renderGene(ga.bestGene());
+		//app.drawTargetImage();
 		app.processEvents();
 		cout << "best gene fitness=" << ga.bestGene().fitness() << ", length=" << ga.bestGene().length() << endl;
 	}

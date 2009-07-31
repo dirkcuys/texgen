@@ -1,9 +1,12 @@
 #include "simplefitness.h"
-#include "simplegene.h"
 
+#include "simplegene.h"
 #include "image.h"
 
+#include <iostream>
+
 using namespace Tai;
+using namespace std;
 
 double SimpleFitness::calculate(SimpleGene& gene)
 {
@@ -18,9 +21,14 @@ double SimpleFitness::calculate(SimpleGene& gene)
 		double pixelFitness2 = 0;
 		for (int j = 0; j < 3; ++j)
 		{
-			double tmp = genImage[4*i + j] - img->pixels[i].p[j];
+			double tmp = genImage[4*i + j] - img->rawPixels[3*i + j];
 			pixelFitness2 += tmp*tmp;
 		}
+		//if (i == 0)
+		//{
+			//cout << (int)img->pixels[i].r << "," << (int)img->pixels[i].g << "," << (int)img->pixels[i].r;
+			//cout << endl;
+		//}
 		totalFitness += pixelFitness2;
 	}
 	//gene.fitness(totalFitness/(255*255*3*m_sdl->width()*m_sdl->height())*10 + gene.length());

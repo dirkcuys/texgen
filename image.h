@@ -4,16 +4,16 @@
 #include "SDL.h"
 
 typedef struct {
-	union {
-		Uint8 r;
-		Uint8 g;
-		Uint8 b;
-		Uint8 p[3];
-	};
+	Uint8 r;
+	Uint8 g;
+	Uint8 b;
 } Pixel;
 
 typedef struct {
-	Pixel* pixels;
+	union {
+		Pixel* pixels;
+		Uint8* rawPixels;
+	};
 	int w;
 	int h;
 	double fitness;
