@@ -2,7 +2,10 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 #include "SDL.h"
+
+using namespace std;
 
 Image* loadImage(SDL_Surface *surface){
 	
@@ -19,16 +22,21 @@ Image* loadImage(SDL_Surface *surface){
 			switch(bpp) {
 				case 1:
 					SDL_GetRGB(*p,surface->format,&image->pixels[image->w*y+x].r,&image->pixels[image->w*y+x].g,&image->pixels[image->w*y+x].b);	
+					break;
 				case 2:
 					SDL_GetRGB(*(Uint16 *)p,surface->format,&image->pixels[image->w*y+x].r,&image->pixels[image->w*y+x].g,&image->pixels[image->w*y+x].b);	
+					break;
 				case 3:
 					if(SDL_BYTEORDER == SDL_BIG_ENDIAN){
 						SDL_GetRGB(p[0] << 16 | p[1] << 8 | p[2],surface->format,&image->pixels[image->w*y+x].r,&image->pixels[image->w*y+x].g,&image->pixels[image->w*y+x].b);	
 					}	
-					else
-						SDL_GetRGB(p[0] | p[1] << 8 | p[2] << 16,surface->format,&image->pixels[image->w*y+x].r,&image->pixels[image->w*y+x].g,&image->pixels[image->w*y+x].b);	
+					else{
+						SDL_GetRGB(p[0] | p[1] << 8 | p[2] << 16,surface->format,&image->pixels[image->w*y+x].r,&image->pixels[image->w*y+x].g,&image->pixels[image->w*y+x].b);
+					}
+					break;
 				case 4:
-					SDL_GetRGB(*(Uint32 *)p,surface->format,&image->pixels[image->w*y+x].r,&image->pixels[image->w*y+x].g,&image->pixels[image->w*y+x].b);	
+					SDL_GetRGB(*(Uint32 *)p,surface->format,&image->pixels[image->w*y+x].r,&image->pixels[image->w*y+x].g,&image->pixels[image->w*y+x].b);
+					break;
 				//default:
 			}
 		}
