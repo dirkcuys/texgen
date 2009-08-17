@@ -235,7 +235,17 @@ void SDLGLMain::handleEvents(const SDL_Event &event)
 	switch (event.type)
 	{
 		case SDL_QUIT:
-			quit();
+			m_quit = true;
+			break;
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym)
+			{
+				case SDLK_ESCAPE:
+					m_quit = true;
+					break;
+				default:
+					break;
+			}
 			break;
 		default:
 			break;

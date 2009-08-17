@@ -35,6 +35,8 @@ public:
 	GLuint width() const { return m_width; };
 	GLuint height() const { return m_height; };
 
+	bool quit_issued() const { return m_quit; };
+
 protected:
 	SDLGLMain(const SDLGLMain&);
 	SDLGLMain& operator=(const SDLGLMain&);

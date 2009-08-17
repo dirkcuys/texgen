@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
+#include <algorithm>
 
 using namespace Tai;
 using namespace std;
@@ -36,9 +37,19 @@ void GeneticAlgorithm<Gene,FitnessFunction>::iterate()
 			mate = int(drandom()*populationSize);
 		}
 
-		Gene offspring = Gene::crossOver(population[cnt], population[mate]);
+		Gene offspring;
+		
+		if (drandom() > 0.5)
+		{
+			offspring = Gene::crossOver(population[cnt], population[mate]);
+		}
+		else
+		{
+			offspring = population[cnt];
+		}
 		//Gene offspring(population[cnt]);// = Gene::crossOver(population[cnt], population[mate]);
-		offspring.mutate(0.5, 0.4);
+		//offspring.mutate(0.5, 0.2);
+		offspring.mutate(0.5, 0.5*(cnt + 1.0)/populationSize);
 		fitnessFunction.calculate(offspring);
 		if (offspring.fitness() < population[cnt].fitness())
 		{

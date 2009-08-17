@@ -14,26 +14,28 @@ int main(int argc, char **argv)
 	srand(time(0));
 	cout << "Starting texgen app" << endl;
 
-	SDLGLMain app(160,120);
+	SDLGLMain app(130,80);
 	Tai::SimpleFitness ff(&app);
 	Tai::GeneticAlgorithm<Tai::SimpleGene, Tai::SimpleFitness> ga(ff);
 
 	vector<Tai::SimpleGene> pop;
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 20; ++i)
 	{
-		pop.push_back(Tai::randomGene(int(5 + drandom()*20 )) );
+		pop.push_back(Tai::randomGene(int(1 + drandom()*5 )) );
 	}
 
 	ga.setInitialPopulation(pop);
 
-	for (int c = 0; c < 100; ++c)
+	for (int c = 0; c < 100000; ++c)
 	{
 		cout << "iteration " << c << ": ";
 		ga.iterate();
 		app.renderGene(ga.bestGene());
 		//app.drawTargetImage();
-		app.processEvents();
 		cout << "best gene fitness=" << ga.bestGene().fitness() << ", length=" << ga.bestGene().length() << endl;
+		app.processEvents();
+		if (app.quit_issued())
+			break;
 	}
 
 	//return app.run();
