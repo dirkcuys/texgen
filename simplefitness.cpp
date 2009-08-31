@@ -18,15 +18,17 @@ double SimpleFitness::calculate(SimpleGene& gene)
 	int size = w*h;
 	for (int i = 0; i < size; ++i)
 	{
-		/*double pixelFitness2 = 0;
+		//*
+		double pixelFitness2 = 0;
 		for (int j = 0; j < 3; ++j)
 		{
 
 			double tmp = genImage[4*i + j] - img->rawPixels[3*i + j];
 			pixelFitness2 += tmp*tmp;
 		}
-		totalFitness += pixelFitness2;*/
+		totalFitness += pixelFitness2;//*/
 
+		/*
    		long r,g,b;
 	    long rmean;
 
@@ -34,7 +36,7 @@ double SimpleFitness::calculate(SimpleGene& gene)
 		r = (int)genImage[4*i] - (int)img->rawPixels[3*i];
 		g = (int)genImage[4*i + 1] - (int)img->rawPixels[3*i + 1];
 		b = (int)genImage[4*i + 2] - (int)img->rawPixels[3*i + 2];
-		totalFitness += (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+		totalFitness += (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);//*/
 
 	}
 	//gene.fitness(totalFitness/(size*3*m_sdl->width()*m_sdl->height())*10 + (gene.length()<10)?totalFitness:gene.length() );

@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <algorithm>
 
+#include "random.h"
+
 using namespace Tai;
 using namespace std;
 
@@ -31,25 +33,25 @@ void GeneticAlgorithm<Gene,FitnessFunction>::iterate()
 
 	for (int cnt = 0; cnt < populationSize; ++cnt)
 	{
-		int mate = int(drandom()*populationSize);
+		int mate = int(randomd()*populationSize);
 		while (mate == cnt && populationSize > 2)
 		{
-			mate = int(drandom()*populationSize);
+			mate = int(randomd()*populationSize);
 		}
 
 		Gene offspring;
 		
-		if (drandom() > 0.5)
-		{
-			offspring = Gene::crossOver(population[cnt], population[mate]);
-		}
-		else
+		//if (randomd() > 0.5)
+		//{
+		//	offspring = Gene::crossOver(population[cnt], population[mate]);
+		//}
+		//else
 		{
 			offspring = population[cnt];
 		}
 		//Gene offspring(population[cnt]);// = Gene::crossOver(population[cnt], population[mate]);
-		//offspring.mutate(0.5, 0.2);
-		offspring.mutate(0.5, 0.5*(cnt + 1.0)/populationSize);
+		offspring.mutate(0.07, 0.01);
+		//offspring.mutate(0.1, 0.5*(cnt + 1.0)/populationSize);
 		fitnessFunction.calculate(offspring);
 		if (offspring.fitness() < population[cnt].fitness())
 		{

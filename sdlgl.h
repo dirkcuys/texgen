@@ -5,6 +5,8 @@
 #include "glew.h"
 #include "gl.h"
 #include "glu.h"
+#include <string>
+
 #include "image.h"
 #include "util.h"
 
@@ -16,7 +18,7 @@ namespace Tai
 class SDLGLMain
 {
 public:
-	SDLGLMain(int width, int height);
+	SDLGLMain(std::string imageName);
 	~SDLGLMain();
 
 	void init();

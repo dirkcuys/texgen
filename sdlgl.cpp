@@ -6,20 +6,20 @@
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-SDLGLMain::SDLGLMain(int width, int height)
+SDLGLMain::SDLGLMain(std::string imageName)
 {
-
-	m_width = width;
-	m_height = height;
-	
 	// set up video
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
 
-	SDL_SetVideoMode(m_width,m_height,32,SDL_OPENGL);
-	SDL_Surface* sdlImg = SDL_LoadBMP("image.bmp");
+	SDL_Surface* sdlImg = SDL_LoadBMP(imageName.c_str());
 	m_originalImage = loadImage(sdlImg);
+	
+	m_width = sdlImg->w;
+	m_height = sdlImg->h;;
+	
 
+	SDL_SetVideoMode(m_width,m_height,32,SDL_OPENGL);
 	glewInit();
 	init();
 
@@ -188,7 +188,7 @@ void SDLGLMain::renderGene(const Tai::SimpleGene &gene)
 	
 	int cnt = 0;
 	glBegin(GL_TRIANGLES);
-		while (gene.values().size() - cnt > 10)
+		while (gene.values().size() - cnt >= 10)
 		{
 			glColor4d(gene.values()[cnt], gene.values()[cnt + 1], gene.values()[cnt + 2], gene.values()[cnt + 3]);
 			glVertex2d(2.0*gene.values()[cnt+4] - 1.0, 2.0*gene.values()[cnt+5] - 1.0);
