@@ -14,35 +14,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef IMAGE_H
-#define IMAGE_H
+#include "simplegenemutate.h"
+#include "simplegene.h"
 
-#include "SDL.h"
+using namespace Tai;
 
-typedef struct {
-	Uint8 r;
-	Uint8 g;
-	Uint8 b;
-} Pixel;
+void SimpleGeneMutate::operator()(SimpleGene&, double mutationFactor, double mutationProb, double growProb, double shrinkProb)
+{
+    
+}
 
-typedef struct {
-	union {
-		Pixel* pixels;
-		Uint8* rawPixels;
-	};
-	int w;
-	int h;
-	double fitness;
-} Image;
-
-Image* loadImage(SDL_Surface *surface);
-
-Image* randomImage(int w, int h);
-
-Image* copyImage(Image*);
-
-void freeImage(Image* image);
-
-SDL_Surface* image2sdl(Image* image);
-
-#endif //IMAGE_H
