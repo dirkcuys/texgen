@@ -20,6 +20,8 @@
 #include <vector>
 #include <functional>
 
+#include "property.h"
+
 namespace Tai
 {
 	template <class Gene, class FitnessFunction>
@@ -35,6 +37,8 @@ namespace Tai
 
 		void setInitialPopulation(const std::vector<Gene> &);
 		const GeneType& bestGene(){ return population[0];};
+
+		//lng::Property<double> someValue;
 
 	private:
 		std::vector<Gene> population;

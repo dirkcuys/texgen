@@ -51,6 +51,8 @@ int main(int argc, char **argv)
 	}
 
 	ga.setInitialPopulation(pop);
+	//ga.someValue(4);
+	//cout << ga.someValue() << endl;
 
 	for (int c = 0; !app.quit_issued(); ++c)
 	{

@@ -25,7 +25,7 @@ namespace Tai
   class SimpleGeneMutate
   {
     public:
-      static void operator() (SimpleGene&, double mutationFactor, double mutationProb, double growProb, double shrinkProb);
+      void operator() (SimpleGene&, double mutationFactor, double mutationProb, double growProb, double shrinkProb);
   };
   
 };

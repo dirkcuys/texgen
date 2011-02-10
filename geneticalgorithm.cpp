@@ -66,7 +66,7 @@ void GeneticAlgorithm<Gene,FitnessFunction>::iterate()
 			offspring = population[cnt];
 		}
 		//Gene offspring(population[cnt]);// = Gene::crossOver(population[cnt], population[mate]);
-		offspring.mutate(0.07, 0.01, 0.05, 0.05);
+		offspring.mutate(0.12, 0.02, 0.05, 0.1);
 		//offspring.mutate(0.1, 0.5*(cnt + 1.0)/populationSize);
 		fitnessFunction.calculate(offspring);
 		if (offspring.fitness() < population[cnt].fitness())

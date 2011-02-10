@@ -21,6 +21,9 @@
 
 namespace Tai
 {
+	/* Represents a possible solution to the target image.
+	 * A sequence of triangle stored as p1x, p1y, p2x, p2y, p3x, p3y, r, g, b, a
+	 */
 	class SimpleGene
 	{
 	public:
@@ -39,6 +42,9 @@ namespace Tai
 		static SimpleGene crossOver(const SimpleGene&, const SimpleGene&);
 
 	private:
+		/* Add a single triangle to the gene
+		 */
+		void grow();
 		std::vector<double> m_values;
 		double m_fitness;
 	};

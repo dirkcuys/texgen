@@ -50,33 +50,29 @@ double SimpleGene::fitness(double fitness_)
 	
 void SimpleGene::mutate(double mutateProb, double mutateFactor, double growProb, double shrinkProb)
 {
-	for (int cnt = 0; cnt < m_values.size(); ++cnt)
+	m_fitness = 0;
+	
+	// only mutate one value
+	double randomValue = randomd();
+	if (randomValue < mutateProb)
 	{
-		double randomValue = randomd();
-		if (randomValue < mutateProb)
-		{
-			m_values[cnt] += gauss(0.0, mutateFactor);
-			if (cnt % 10 > 5) // keep colors in bound
-				clamp(m_values[cnt], 0.0, 1.0);
-		}
+		int mgene = int(m_values.size()*randomd());
+		m_values[mgene] += gauss(0.0, mutateFactor);
+		if (mgene % 10 > 5) // keep colors in (0,1)
+			clamp(m_values[mgene], 0.0, 1.0);
+		return;
 	}
 
+	// try to shrink or grow if a value wasn't already mutated
 	double randomValue = randomd();
 	if (randomValue < growProb) // add a gene
 	{
-		for (int cnt = 0; cnt < 6; ++cnt)
-		{
-			m_values.push_back(2.0*randomd() - 1.0);
-		}
-		for (int cnt = 6; cnt < 10; ++cnt)
-		{
-			m_values.push_back(0.2*randomd());
-		}
+		grow();
 	}
 	else 
 	{
 		randomValue = randomd();
-		if (randomValue < shrinkProb)// probability)
+		if (randomValue < shrinkProb)
 		{
 			randomValue = m_values.size()/10.0*randomd();
 			int dgene = 10*int(randomValue);
@@ -88,7 +84,21 @@ void SimpleGene::mutate(double mutateProb, double mutateFactor, double growProb,
 		}
 	}
 
-	m_fitness = 0;
+	
+}
+
+void SimpleGene::grow()
+{
+	m_values.reserve(m_values.size() + 10);
+	for (int cnt = 0; cnt < 6; ++cnt)
+	{
+		m_values.push_back(2.0*randomd() - 1.0);
+	}
+	
+	for (int cnt = 6; cnt < 10; ++cnt)
+	{
+		m_values.push_back(0.05*randomd());
+	}
 }
 
 //static function

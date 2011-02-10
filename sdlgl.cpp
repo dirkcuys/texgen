@@ -91,7 +91,7 @@ void SDLGLMain::drawTargetImage()
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 		
-		glBegin(GL_POINTS);
+	glBegin(GL_POINTS);
 		for ( int y = 0; y < m_height; y+=2)
 		{
 			for (int x = 0; x < m_width; x+=2)
@@ -103,7 +103,7 @@ void SDLGLMain::drawTargetImage()
 				glVertex3f(xmul, ymul, 0.0);
 			}
 		}
-		glEnd();
+	glEnd();
 
 
 	SDL_GL_SwapBuffers();
