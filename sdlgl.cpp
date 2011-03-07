@@ -199,18 +199,21 @@ void SDLGLMain::draw()
 void SDLGLMain::renderGene(const Tai::SimpleGene &gene)
 {
 
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	int cnt = 0;
 	glBegin(GL_TRIANGLES);
-		while (gene.values().size() - cnt >= 10)
+		while (gene.values().size() - cnt >= 18)
 		{
-			glColor4d(gene.values()[cnt], gene.values()[cnt + 1], gene.values()[cnt + 2], gene.values()[cnt + 3]);
+			glColor4d(gene.values()[cnt + 6], gene.values()[cnt + 7], gene.values()[cnt + 8], gene.values()[cnt + 9]);
+			//glColor3d(gene.values()[cnt + 6], gene.values()[cnt + 7], gene.values()[cnt + 8]);
+			glVertex2d(2.0*gene.values()[cnt] - 1.0, 2.0*gene.values()[cnt+1] - 1.0);
+			glColor4d(gene.values()[cnt + 10], gene.values()[cnt + 11], gene.values()[cnt + 12], gene.values()[cnt + 13]);
+			glVertex2d(2.0*gene.values()[cnt+2] - 1.0, 2.0*gene.values()[cnt+3] - 1.0);
+			glColor4d(gene.values()[cnt + 14], gene.values()[cnt + 15], gene.values()[cnt + 16], gene.values()[cnt + 17]);
 			glVertex2d(2.0*gene.values()[cnt+4] - 1.0, 2.0*gene.values()[cnt+5] - 1.0);
-			glVertex2d(2.0*gene.values()[cnt+6] - 1.0, 2.0*gene.values()[cnt+7] - 1.0);
-			glVertex2d(2.0*gene.values()[cnt+8] - 1.0, 2.0*gene.values()[cnt+9] - 1.0);
-			cnt += 10;
+			cnt += 18;
 		}
 	glEnd();
 	

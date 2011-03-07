@@ -42,9 +42,11 @@ int main(int argc, char **argv)
 	SDLGLMain app(imagePath);
 	Tai::SimpleFitness ff(&app);
 	Tai::GeneticAlgorithm<Tai::SimpleGene, Tai::SimpleFitness> ga(ff);
+	
+	int populationSize = 1;
 
 	vector<Tai::SimpleGene> pop;
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < populationSize; ++i)
 	{
 		//pop.push_back(Tai::randomGene(int(1 + drandom()*5 )) );
 		pop.push_back(Tai::randomGene(1) );
@@ -58,9 +60,11 @@ int main(int argc, char **argv)
 	{
 		cout << "iteration " << c << ": ";
 		ga.iterate();
-		app.renderGene(ga.bestGene());
+		if (c % 10 == 0)
+			app.renderGene(ga.bestGene());
 		//app.drawTargetImage();
-		cout << "best gene fitness=" << ga.bestGene().fitness() << ", length=" << ga.bestGene().length() << endl;
+		cout << "best gene fitness=" << ga.bestGene().fitness() << ", length=" << ga.bestGene().length()/18.0 << endl;
+		/*cout << "worst gene fitness=" << ga.worstGene().fitness() << ", length=" << ga.worstGene().length() << endl;*/
 		app.processEvents();
 	}
 

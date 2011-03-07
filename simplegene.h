@@ -22,7 +22,7 @@
 namespace Tai
 {
 	/* Represents a possible solution to the target image.
-	 * A sequence of triangle stored as p1x, p1y, p2x, p2y, p3x, p3y, r, g, b, a
+	 * A sequence of triangle stored as p1x, p1y, p2x, p2y, p3x, p3y, r1, g1, b1, a1, r2, g2, b2, a2, r3, g3, b3, a3
 	 */
 	class SimpleGene
 	{
@@ -45,6 +45,7 @@ namespace Tai
 		/* Add a single triangle to the gene
 		 */
 		void grow();
+		void shrink();
 		std::vector<double> m_values;
 		double m_fitness;
 	};

@@ -45,28 +45,50 @@ void GeneticAlgorithm<Gene,FitnessFunction>::iterate()
 	// Selection of next generation
 	
 	int populationSize = population.size();
-	//population.reserve(2*populationSize);
+	
+	double mutateProb = 0.75;
+	double mutateFactor = 0.05;
+	double growProb = 0.01;
+	double shrinkProb = 0.4;
+	
+	if (m_vResults.size() > 0)
+	{
+		int index = std::min<int>(m_vResults.size(), 20);
+		double delta = ( m_vResults[m_vResults.size() - index] - *(m_vResults.rbegin()))/(1.0*index);
+		growProb = 0.05/(1.0 + pow(2, delta/100.0 ));
+		mutateFactor = 0.05/(1.0 + pow(2, -delta/20.0 + 5));
+		mutateProb = 0.5/(1.0 + pow(2, -delta/20.0 + 5));
+	}
+	
+	cout << "mutateProb=" << mutateProb << ", ";
+	cout << "mutateFactor=" << mutateFactor << ", ";
+	cout << "growProb=" << growProb << ", ";
+	cout << "shrinkProb=" << shrinkProb << endl;
 
 	for (int cnt = 0; cnt < populationSize; ++cnt)
 	{
-		int mate = int(randomd()*populationSize);
+		/*int mate = int(randomd()*populationSize);
 		while (mate == cnt && populationSize > 2)
 		{
 			mate = int(randomd()*populationSize);
-		}
+		}*/
 
+		/*
 		Gene offspring;
 		
-		//if (randomd() > 0.5)
-		//{
-		//	offspring = Gene::crossOver(population[cnt], population[mate]);
-		//}
-		//else
+		if (randomd() > 0.5)
+		{
+			offspring = Gene::crossOver(population[cnt], population[mate]);
+		}
+		else
 		{
 			offspring = population[cnt];
 		}
+		//*/
+		Gene offspring = population[cnt];
 		//Gene offspring(population[cnt]);// = Gene::crossOver(population[cnt], population[mate]);
-		offspring.mutate(0.12, 0.02, 0.05, 0.1);
+		// mutateProb, mutateFactor, growProb, shrinkProb
+		offspring.mutate(mutateProb, mutateFactor, growProb, shrinkProb);
 		//offspring.mutate(0.1, 0.5*(cnt + 1.0)/populationSize);
 		fitnessFunction.calculate(offspring);
 		if (offspring.fitness() < population[cnt].fitness())
@@ -84,6 +106,8 @@ void GeneticAlgorithm<Gene,FitnessFunction>::iterate()
 	}*/
 
 	sort(population.begin(), population.end(), MoreFit());
+	
+	m_vResults.push_back(bestGene().fitness());
 
 	// kill of weaker part of population
 	/*while (population.size() > populationSize)

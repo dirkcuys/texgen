@@ -52,54 +52,72 @@ void SimpleGene::mutate(double mutateProb, double mutateFactor, double growProb,
 {
 	m_fitness = 0;
 	
+	// mutate one value of some triagles
+	for (int gi = 0; gi < m_values.size()/18.0; ++gi)
+	{
+		double randomValue = randomd();
+		if (randomValue < mutateProb)
+		{
+			int ii = int(randomd()*18); // index in gene
+			m_values[ii] += gauss(0.0, mutateFactor);
+			if (ii % 18 > 5) // keep colors in (0,1)
+				clamp(m_values[ii], 0.0, 1.0);
+		}
+	}
+	
 	// only mutate one value
-	double randomValue = randomd();
-	if (randomValue < mutateProb)
+	/*if (randomd() < mutateProb)
 	{
 		int mgene = int(m_values.size()*randomd());
 		m_values[mgene] += gauss(0.0, mutateFactor);
-		if (mgene % 10 > 5) // keep colors in (0,1)
-			clamp(m_values[mgene], 0.0, 1.0);
-		return;
-	}
+		if (mgene % 18 > 5) // keep colors in (0,1)
+				clamp(m_values[mgene], 0.0, 1.0);
+		//return;
+	}*/
 
 	// try to shrink or grow if a value wasn't already mutated
-	double randomValue = randomd();
-	if (randomValue < growProb) // add a gene
+	if (randomd() < growProb) // add a gene
 	{
 		grow();
 	}
 	else 
 	{
-		randomValue = randomd();
-		if (randomValue < shrinkProb)
+		if (randomd() < shrinkProb)
 		{
-			randomValue = m_values.size()/10.0*randomd();
-			int dgene = 10*int(randomValue);
-			for (int cnt = 9; cnt >= 0; --cnt)
-			{
-				swap(m_values[dgene + cnt], m_values.back());
-				m_values.pop_back();
-			}
+			shrink();
 		}
 	}
-
-	
 }
 
 void SimpleGene::grow()
 {
-	m_values.reserve(m_values.size() + 10);
-	for (int cnt = 0; cnt < 6; ++cnt)
+	m_values.reserve(m_values.size() + 18);
+	double cx = randomd();
+	double cy = randomd();
+	for (int cnt = 0; cnt < 3; ++cnt)
 	{
-		m_values.push_back(2.0*randomd() - 1.0);
+		//m_values.push_back(2.0*randomd() - 1.0);
+		m_values.push_back(cx + gauss(0.0, 0.1));
+		m_values.push_back(cy + gauss(0.0, 0.1));
 	}
 	
-	for (int cnt = 6; cnt < 10; ++cnt)
+	for (int cntc = 6; cntc < 18; ++cntc)
 	{
-		m_values.push_back(0.05*randomd());
+		m_values.push_back(randomd());
 	}
 }
+
+void SimpleGene::shrink()
+{
+	double randomValue = m_values.size()/18.0*randomd();
+	int dgene = 18*int(randomValue);
+	for (int cnt = 17; cnt >= 0; --cnt)
+	{
+		swap(m_values[dgene + cnt], m_values.back());
+		m_values.pop_back();
+	}
+}
+
 
 //static function
 SimpleGene SimpleGene::crossOver(const SimpleGene& lhs, const SimpleGene& rhs)
@@ -127,8 +145,8 @@ SimpleGene SimpleGene::crossOver(const SimpleGene& lhs, const SimpleGene& rhs)
 SimpleGene Tai::randomGene(int size)
 {
 	vector<double> tmp;
-	tmp.reserve(10*size);
-	for (int cnt = 0; cnt < 10*size; ++cnt)
+	tmp.reserve(18*size);
+	for (int cnt = 0; cnt < 18*size; ++cnt)
 	{
 			tmp.push_back(randomd());
 	}

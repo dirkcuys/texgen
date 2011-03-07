@@ -31,6 +31,7 @@ namespace Tai
 	class SimpleGene;
 };
 
+/** Class driving openGL rendering and IO */
 class SDLGLMain
 {
 public:

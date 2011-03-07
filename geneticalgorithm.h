@@ -37,6 +37,7 @@ namespace Tai
 
 		void setInitialPopulation(const std::vector<Gene> &);
 		const GeneType& bestGene(){ return population[0];};
+		const GeneType& worstGene(){ return population[population.size()-1];};
 
 		//lng::Property<double> someValue;
 
@@ -51,6 +52,8 @@ namespace Tai
 				return g1.fitness() < g2.fitness();
 			}
 		};
+		
+		std::vector<double> m_vResults;
 
 	};
 }; //namespace Tai
