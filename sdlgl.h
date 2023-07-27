@@ -67,6 +67,8 @@ private:
 	GLuint m_pbo;
 	GLuint m_width;
 	GLuint m_height;
+    SDL_Window *m_window;
+    SDL_GLContext m_glcontext;
 	Image *m_originalImage;
 
 };

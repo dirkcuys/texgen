@@ -35,7 +35,14 @@ SDLGLMain::SDLGLMain(std::string imageName)
 	m_height = sdlImg->h;;
 	
 
-	SDL_SetVideoMode(m_width,m_height,32,SDL_OPENGL);
+	// TODO SDL_SetVideoMode(m_width,m_height,32,SDL_OPENGL);
+    m_window = SDL_CreateWindow(
+        "SDL2/OpenGL Demo", 0, 0, m_width, m_height, 
+        SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE );
+  
+    // Create an OpenGL context associated with the window.
+    SDL_GLContext glcontext = SDL_GL_CreateContext(m_window);
+
 	glewInit();
 	init();
 
@@ -44,6 +51,7 @@ SDLGLMain::SDLGLMain(std::string imageName)
 
 SDLGLMain::~SDLGLMain()
 {
+    SDL_GL_DeleteContext(m_glcontext);
 }
 
 void SDLGLMain::init()
@@ -105,8 +113,7 @@ void SDLGLMain::drawTargetImage()
 		}
 	glEnd();
 
-
-	SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(m_window);
 
 }
 
@@ -193,7 +200,7 @@ void SDLGLMain::draw()
 
 	glPopMatrix();
 	glFlush();*/
-	SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(m_window);
 }
 
 void SDLGLMain::renderGene(const Tai::SimpleGene &gene)
@@ -227,7 +234,7 @@ GLubyte* SDLGLMain::renderGeneToSurface(const Tai::SimpleGene &gene)
 	renderGene(gene);
 
 	//glFlush();
-	SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(m_window);
 	
 	
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
